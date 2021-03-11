@@ -45,7 +45,7 @@ jobs:
           
       - name: Check Coverity Existance
         #run: test -e env.COVERITY && echo "COVERITY_EXISTS=true" >> $GITHUB_ENV || echo "Coverity does not exist in the cache."
-        run: ls
+        run: ls -la
           
       - name: Download Coverity
         if: env.COVERITY_EXISTS == 'false'
