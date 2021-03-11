@@ -49,8 +49,8 @@ jobs:
       - name: List Workspace
         run: cd $GITHUB_WORKSPACE && ls -la
         
-      - name: List Coverity
-        run: cd ${{ env.COVERITY }} && ls -la
+      #- name: List Coverity
+      #  run: cd ${{ env.COVERITY }} && ls -la
         
       - name: Download Coverity
         if: env.COVERITY_EXISTS == 'false'
@@ -62,6 +62,12 @@ jobs:
         with:
           path: ${{ env.COVERITY }}
           key: ${{ runner.os }}-coverity-${{ hashFiles('${{ env.COVERITY }}/VERSION.xml') }}
+          
+      - name: List Workspace Two
+        run: cd $GITHUB_WORKSPACE && ls -la
+        
+      - name: List Coverity Two
+        run: cd ${{ env.COVERITY }} && ls -la
           
       - name: Cache Local Maven Repository
         uses: actions/cache@v2
