@@ -41,7 +41,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.COVERITY }}
-          key: ${{ runner.os }}-coverity-${{ hashFiles('${{ COVERITY }}/VERSION.xml') }}
+          key: ${{ runner.os }}-coverity-${{ hashFiles('${{ env.COVERITY }}/VERSION.xml') }}
           
       - name: Test One
         run: mkdir -p ${{ env.COVERITY }}
@@ -50,18 +50,18 @@ jobs:
         run: test -e ${{ env.COVERITY }} && echo "COVERITY_EXISTS=true" >> $GITHUB_ENV || echo "Coverity does not exist in the cache."
         
       - name: List
-        run: cd ${{ env.COVERITY }} && ls -la
+        run: cd $GITHUB_WORKSPACE && ls -la
           
       - name: Download Coverity
-        if: ${{ env.COVERITY_EXISTS }} == 'false'
-        run: wget https://scan.coverity.com/download/linux64 --post-data "token=${{ secrets.COVERITY_TOKEN }}&project=rlp_01" -O coverity_tool.tgz && tar zxvf $COVERITY.tgz
+        if: env.COVERITY_EXISTS == 'false'
+        run: wget https://scan.coverity.com/download/linux64 --post-data "token=${{ secrets.COVERITY_TOKEN }}&project=rlp_01" -O ${{ env.COVERITY }}.tgz && tar zxvf ${{ env.COVERITY }}.tgz
         
       - name: Cache Downloaded Coverity
-        if: ${{ env.COVERITY_EXISTS }} == 'false'
+        if: env.COVERITY_EXISTS == 'false'
         uses: actions/cache@v2
         with:
           path: ${{ env.COVERITY }}
-          key: ${{ runner.os }}-coverity-${{ hashFiles('${{ COVERITY }}/VERSION.xml') }}
+          key: ${{ runner.os }}-coverity-${{ hashFiles('${{ env.COVERITY }}/VERSION.xml') }}
           
       - name: Cache Local Maven Repository
         uses: actions/cache@v2
