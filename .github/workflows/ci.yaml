@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      COVERITY: ~/coverity_tool
+      COVERITY: $GITHUB_WORKSPACE/coverity_tool
       COVERITY_EXISTS: true
       
     steps:
@@ -47,7 +47,7 @@ jobs:
         run: test -e env.COVERITY && echo "COVERITY_EXISTS=true" >> $GITHUB_ENV || echo "Coverity does not exist in the cache."
         
       - name: List
-        run: cd ~ && ls -la
+        run: cd $GITHUB_WORKSPACE && ls -la
           
       - name: Download Coverity
         if: env.COVERITY_EXISTS == 'false'
