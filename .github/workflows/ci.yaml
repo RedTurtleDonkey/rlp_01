@@ -54,7 +54,7 @@ jobs:
         
       - name: Download Coverity
         if: env.COVERITY_EXISTS == 'false'
-        run: wget https://scan.coverity.com/download/linux64 --post-data "token=${{ secrets.COVERITY_TOKEN }}&project=rlp_01" -O ${{ env.COVERITY }}.tgz && tar zxvf ${{ env.COVERITY }}.tgz -C $GITHUB_WORKSPACE
+        run: wget https://scan.coverity.com/download/linux64 --post-data "token=${{ secrets.COVERITY_TOKEN }}&project=rlp_01" -O ${{ env.COVERITY }}.tgz && mkdir ${{ env.COVERITY }} && tar zxvf ${{ env.COVERITY }}.tgz -C ${{ env.COVERITY }} --strip-components 1
         
       - name: Cache Downloaded Coverity
         if: env.COVERITY_EXISTS == 'false'
