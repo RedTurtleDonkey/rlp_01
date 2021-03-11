@@ -34,7 +34,7 @@ jobs:
     
     env:
       COVERITY: coverity_tool
-      COVERITY_EXISTS: true
+      COVERITY_EXISTS: false
       
     steps:
       - name: Cache Coverity
@@ -43,8 +43,8 @@ jobs:
           path: ~/coverity_analysis_linux
           key: ${{ runner.os }}-coverity-${{ hashFiles('$COVERITY/VERSION.xml') }}
           
-      #- name: Check Coverity Existance
-      #  run: echo "COVERITY_EXISTS=true" >> $GITHUB_ENV
+      - name: Check Coverity Existance
+        run: test -e env.COVERITY echo "COVERITY_EXISTS=true" >> $GITHUB_ENV
           
       - name: Download Coverity
         if: env.COVERITY_EXISTS == 'false'
