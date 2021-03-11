@@ -33,8 +33,8 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      COVERITY: coverity_tool
-      COVERITY_EXISTS: false
+      COVERITY: ~/coverity_tool
+      COVERITY_EXISTS: true
       
     steps:
       - name: Cache Coverity
@@ -43,11 +43,14 @@ jobs:
           path: env.COVERITY
           key: ${{ runner.os }}-coverity-${{ hashFiles('$COVERITY/VERSION.xml') }}
           
-      - name: Test Coverity Cache
-        run: ls -la
-          
       - name: Check Coverity Existance
         run: test -e env.COVERITY && echo "COVERITY_EXISTS=true" >> $GITHUB_ENV || echo "Coverity does not exist in the cache."
+        
+      - name: Temp mkdir
+        run: mkdir -p env.COVERITY
+        
+      - name: Temp Check
+        run: test -e env.COVERITY && echo "folder exists" || "folder does not exist"
           
       - name: Download Coverity
         if: env.COVERITY_EXISTS == 'false'
