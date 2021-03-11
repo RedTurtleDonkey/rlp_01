@@ -50,7 +50,7 @@ jobs:
         run: mkdir -p ${{ env.COVERITY }}
         
       - name: List
-        run: cd ${{ GITHUB_WORKSPACE }} && ls -la
+        run: cd $GITHUB_WORKSPACE && ls -la
           
       - name: Download Coverity
         if: env.COVERITY_EXISTS == 'false'
