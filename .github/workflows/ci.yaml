@@ -47,7 +47,7 @@ jobs:
         run: test -e env.COVERITY && echo "COVERITY_EXISTS=true" >> $GITHUB_ENV || echo "Coverity does not exist in the cache."
         
       - name: Temp mkdir
-        run: mkdir -p env.COVERITY
+        run: mkdir -p $COVERITY
         
       - name: List
         run: cd $GITHUB_WORKSPACE && ls -la
