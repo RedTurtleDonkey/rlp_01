@@ -34,18 +34,17 @@ jobs:
     
     env:
       COVERITY: coverity_tool
-      COVERITY_EXISTS: true
+      COVERITY_EXISTS: false
       
     steps:
       - name: Cache Coverity
         uses: actions/cache@v2
         with:
-          path: ~/coverity_analysis_linux
+          path: env.COVERITY
           key: ${{ runner.os }}-coverity-${{ hashFiles('$COVERITY/VERSION.xml') }}
           
       - name: Check Coverity Existance
-        #run: test -e env.COVERITY && echo "COVERITY_EXISTS=true" >> $GITHUB_ENV || echo "Coverity does not exist in the cache."
-        run: ls -la
+        run: test -e env.COVERITY && echo "COVERITY_EXISTS=true" >> $GITHUB_ENV || echo "Coverity does not exist in the cache."
           
       - name: Download Coverity
         if: env.COVERITY_EXISTS == 'false'
@@ -55,7 +54,7 @@ jobs:
         if: env.COVERITY_EXISTS == 'false'
         uses: actions/cache@v2
         with:
-          path: ~/coverity_analysis_linux
+          path: env.COVERITY
           key: ${{ runner.os }}-coverity-${{ hashFiles('$COVERITY/VERSION.xml') }}
           
       - name: Cache Local Maven Repository
