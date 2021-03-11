@@ -43,14 +43,8 @@ jobs:
           path: ${{ env.COVERITY }}
           key: ${{ runner.os }}-coverity-${{ hashFiles('${{ env.COVERITY }}/VERSION.xml') }}
           
-      - name: Test One
-        run: mkdir -p ${{ env.COVERITY }}
-          
       - name: Check Coverity Existance
         run: test -e ${{ env.COVERITY }} && echo "COVERITY_EXISTS=true" >> $GITHUB_ENV || echo "Coverity does not exist in the cache."
-        
-      - name: List
-        run: cd $GITHUB_WORKSPACE && ls -la
           
       - name: Download Coverity
         if: env.COVERITY_EXISTS == 'false'
