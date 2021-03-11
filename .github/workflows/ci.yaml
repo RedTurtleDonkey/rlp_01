@@ -41,7 +41,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.COVERITY }}
-          key: ${{ runner.os }}-coverity-${{ hashFiles('${{ env.COVERITY }}/VERSION') }}
+          key: coverity-${{ hashFiles('${{ env.COVERITY }}/VERSION') }}
           
       - name: Check Coverity Existance
         run: test -e ${{ env.COVERITY }} && echo "COVERITY_EXISTS=true" >> $GITHUB_ENV || echo "Coverity does not exist in the cache."
