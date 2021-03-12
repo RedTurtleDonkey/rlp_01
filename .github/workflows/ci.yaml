@@ -38,4 +38,4 @@ jobs:
         run: wget https://scan.coverity.com/download/linux64 --post-data "token=${{ secrets.COVERITY_TOKEN }}&project=rlp_01" -O ${{ env.COVERITY }}.tgz && mkdir ${{ env.COVERITY }} && tar zxvf ${{ env.COVERITY }}.tgz -C ${{ env.COVERITY }} --strip-components 1
         
       - name: List Workspace
-        run: cd $GITHUB_WORKSPACE && ls -a
+        run: cd $GITHUB_WORKSPACE && ls -a && ${{ env.COVERITY }} && ls -a
