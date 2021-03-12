@@ -34,20 +34,17 @@ jobs:
     
     env:
       COVERITY: $GITHUB_WORKSPACE/coverity_tool
-      COVERITY_EXISTS: false
       
     steps:
       - name: Cache Coverity
+        id: coverity
         uses: actions/cache@v2
         with:
           path: ${{ env.COVERITY }}
           key: coverity-
-          
-      - name: Check Coverity Existance
-        run: test -e ${{ env.COVERITY }} && echo "COVERITY_EXISTS=true" >> $GITHUB_ENV || echo "Coverity does not exist in the cache."
         
       - name: Download Coverity
-        if: env.COVERITY_EXISTS == 'false'
+        if: steps.coverity.outputs.cache-hit != 'true'
         run: wget https://scan.coverity.com/download/linux64 --post-data "token=${{ secrets.COVERITY_TOKEN }}&project=rlp_01" -O ${{ env.COVERITY }}.tgz && mkdir ${{ env.COVERITY }} && tar zxvf ${{ env.COVERITY }}.tgz -C ${{ env.COVERITY }} --strip-components 1
           
       - name: Cache Local Maven Repository
