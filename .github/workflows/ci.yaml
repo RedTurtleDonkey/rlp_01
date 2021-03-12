@@ -39,3 +39,6 @@ jobs:
         
       - name: List Workspace
         run: cd $GITHUB_WORKSPACE && ls -a && ${{ env.COVERITY }} && ls -a
+        
+      - name: Echo Cache
+        run: echo ${{ steps.coverity.outputs.dir }}
