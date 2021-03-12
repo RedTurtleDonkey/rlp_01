@@ -15,8 +15,8 @@ jobs:
         with:
           java-version: 1.8
 
-          server-id: # This should match the id of the repository Maven is connecting to
-          server-username: ${{ secrets.MAVEN_USERNAME }}
+          server-id: ossrh
+          server-username: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           server-password: ${{ secrets.MAVEN_CENTRAL_TOKEN }} # Delete this secret if you are using a gpg private key to login
 
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
