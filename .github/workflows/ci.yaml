@@ -4,11 +4,11 @@ on: push
 
 jobs:
   verify:
-    name: Verify
+    name: Verify Code
     runs-on: ubuntu-latest
     
     env:
-      COVERITY: coverity_tool
+      COVERITY: $GITHUB_WORKSPACE/coverity_tool
 
     steps:
       - uses: actions/checkout@v2
@@ -26,16 +26,6 @@ jobs:
       - name: Compile Test and Verify
         run: mvn clean verify
         
-  coverity:
-    needs: verify
-  
-    name: Coverity
-    runs-on: ubuntu-latest
-    
-    env:
-      COVERITY: $GITHUB_WORKSPACE/coverity_tool
-      
-    steps:
       - name: Cache Coverity
         id: coverity
         uses: actions/cache@v2
@@ -46,9 +36,6 @@ jobs:
       - name: Download Coverity
         if: steps.coverity.outputs.cache-hit != 'true'
         run: wget https://scan.coverity.com/download/linux64 --post-data "token=${{ secrets.COVERITY_TOKEN }}&project=rlp_01" -O ${{ env.COVERITY }}.tgz && mkdir ${{ env.COVERITY }} && tar zxvf ${{ env.COVERITY }}.tgz -C ${{ env.COVERITY }} --strip-components 1
-          
-      - name: Cache Local Maven Repository
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        
+      - name: List Workspace
+        run: cd $GITHUB_WORKSPACE && ls -a
