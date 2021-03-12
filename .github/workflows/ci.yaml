@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      COVERITY: $GITHUB_WORKSPACE/coverity_tool
+      COVERITY: coverity_tool
 
     steps:
       - uses: actions/checkout@v2
@@ -27,19 +27,22 @@ jobs:
       - name: Compile Test and Verify
         run: mvn clean verify
         
-      - name: Cache Coverity
-        id: coverity
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.COVERITY }}
-          key: coverity-temp
-        
       - name: Download Coverity
-        if: steps.coverity.outputs.cache-hit != 'true'
-        run: wget https://scan.coverity.com/download/linux64 --post-data "token=${{ secrets.COVERITY_TOKEN }}&project=rlp_01" -O ${{ env.COVERITY }}.tgz && mkdir ${{ env.COVERITY }} && tar zxvf ${{ env.COVERITY }}.tgz -C ${{ env.COVERITY }} --strip-components 1
+        run: |
+          wget https://scan.coverity.com/download/linux64 --post-data "token=${{ secrets.COVERITY_TOKEN }}&project=rlp_01" -O ${{ env.COVERITY }}.tgz
+          mkdir ${{ env.COVERITY }}
+          tar zxvf ${{ env.COVERITY }}.tgz -C ${{ env.COVERITY }} --strip-components 1
         
-      - name: List Workspace
-        run: cd $GITHUB_WORKSPACE && ls -a && cd /home/runner/work/rlp_01 && ls -a && cd rlp_01 && ls -a
+      - name: Compile Coverity
+        run: |
+          ./${{ env.COVERITY }}/bin/cov-build --dir cov-int mvn -DskipTests=true clean compile
+          tar czvf rlp_01.tgz cov-int
         
-      - name: Echo Cache
-        run: echo ${{ steps.coverity.outputs.dir }} ${{ steps.maven.outputs.dir }}
+      - name: Upload to Coverity
+        # Temp version for testing
+        run: curl \
+               --form token=${{ secrets.COVERITY_TOKEN }} \
+               --form email=${{ secrets.COVERITY_EMAIL }} \
+               --form file=@rlp_01.tgz --form version="1.0" \
+               --form description="automated upload" \
+               https://scan.coverity.com/builds?project=rlp_01
